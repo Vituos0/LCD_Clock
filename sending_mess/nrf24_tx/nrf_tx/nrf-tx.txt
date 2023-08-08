@@ -1,0 +1,22 @@
+#include "SPI.h"
+#include <NRFLite.h>
+
+RF24 radio(10, 9); // khởi tạo đối tượng RF24 với chân CSN là 7 và CE là 8
+const byte address[6] = "00001"; // địa chỉ của NRF24L01
+
+void setup() {
+  Serial.begin(9600);
+  radio.begin(); // khởi động module NRF24L01
+  radio.openWritingPipe(address); // thiết lập địa chỉ cho bộ phát
+  radio.setPALevel(RF24_PA_MIN); // thiết lập mức công suất
+}
+
+void loop() {
+  const char *message = " Alo !"; // nội dung tin nhắn
+  radio.stopListening(); // chuyển sang chế độ phát
+  radio.write(message, strlen(message)); // gửi tin nhắn
+  Serial.println("Sent message: ");
+  Serial.println(message);
+  
+  delay(1000);
+}
